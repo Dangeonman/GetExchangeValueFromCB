@@ -19,7 +19,7 @@ def getDictFromUrl(URL):
     file.close()
     data =xmltodict.parse(data)
     return data
-
+2
 def kyrs():
     ID = argument.code
     DF =  "%d/%m/%Y"
@@ -32,14 +32,22 @@ def kyrs():
             str1 = "Формат введёной даты не соответствует необходимому формату %s" % (DF)   
             print(str1)
             quit(-1) 
-        DD= argument.data
+        try:
+            DD= argument.data
+        except:
+            str2 = "А где дата?"
+            print(str2)
     data1 = getDictFromUrl(URL_EXCHANGE_DATE % (DD)) 
 
     for i in data1['ValCurs']['Valute']: 
         if i['@ID'] != ID:
             continue
-        echostr = "Курс валюты к рублю %s" % (i["Value"])
-        print(echostr)
+        try:
+            echostr = "Курс валюты к рублю %s" % (i["Value"])
+            print(echostr)
+        except:
+            str3 = "Что-то пошло не так..."
+            print(str3)
 
 def Name_Valuta():
     data =getDictFromUrl(URL_EXCHANGE_VAL_LIST)
@@ -47,7 +55,7 @@ def Name_Valuta():
     if len(sys.argv) > 1:
         try:
             for i in new_data:
-                print("Валюта:", i['Name'], "ID:", i['@ID'])
+                print("Валюта:", i['Name'], "Код:", i['@ID'])
         except:
             str1 = "Ошибка"
             print(str1)
