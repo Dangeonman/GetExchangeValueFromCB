@@ -7,7 +7,7 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--list", action="store_true", help = "Вывод доступных валют")
-parser.add_argument("--data", help = "Укажите дату в формате 01/01/2001")
+parser.add_argument("--data", help = "Укажите дату в формате 01/01/2000")
 parser.add_argument("--code", help = "Введите код нужной валюты")
 
 URL_EXCHANGE_DATE = "http://www.cbr.ru/scripts/XML_daily.asp?date_req=%s"
@@ -66,11 +66,15 @@ argument = parser.parse_args()
 try:
     if argument.list:
         Name_Valuta()
-    elif argument.code:
-        ID = argument.code
-        kyrs()
-    elif argument.data:
-        kyrs()
+    try:
+        if argument.data:
+            kyrs()
+        elif argument.code:
+            kyrs()
+    except:
+        str1 = "Необходимо указать код и дату"
+        print(str1)
 except:
     str0 = "Неверно введены данные"
     print(str0)
+
