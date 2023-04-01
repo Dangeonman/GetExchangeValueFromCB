@@ -21,7 +21,8 @@ def getDictFromUrl(URL):
     return data
 2
 def kyrs():
-    ID = argument.code
+    if len(argument.code) == 6:
+        ID = argument.code
     DF =  "%d/%m/%Y"
     DD = "01/01/2020"
 
@@ -43,7 +44,7 @@ def kyrs():
         if i['@ID'] != ID:
             continue
         try:
-            echostr = "Курс валюты к рублю %s" % (i["Value"])
+            echostr = "Курс %s" % (i["Name"]) + " к рублю %s" % (i["Value"])
             print(echostr)
         except:
             str3 = "Что-то пошло не так..."
@@ -62,11 +63,14 @@ def Name_Valuta():
             quit(-1)
 
 argument = parser.parse_args()
-
-if argument.list:
-    Name_Valuta()
-elif argument.data:
-    kyrs()
-elif argument.code:
-    ID = argument.code
-    kyrs()
+try:
+    if argument.list:
+        Name_Valuta()
+    elif argument.code:
+        ID = argument.code
+        kyrs()
+    elif argument.data:
+        kyrs()
+except:
+    str0 = "Неверно введены данные"
+    print(str0)
