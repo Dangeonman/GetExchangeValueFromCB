@@ -22,16 +22,6 @@ def getDictFromUrl(URL):
     data =xmltodict.parse(data)
     return data
 
-path = './list.xml'
-list_file = os.path.isfile(path)
-
-if list_file == True:
-    print("Такой файл существует")
-else:
-    list_file = open("list.xml", "w", encoding="utf-8")
-    list_file.write(str(getDictFromUrl(URL_EXCHANGE_VAL_LIST)))
-
-
 def kyrs():
     if len(argument.code) == 6:
         ID = argument.code
@@ -58,7 +48,7 @@ def kyrs():
     print(echostr)
 
 def Name_Valuta():
-    data =open("list.xml", "r", encoding="utf-8")
+    data =getDictFromUrl(URL_EXCHANGE_VAL_LIST)
     new_data = data['Valuta']['Item']
     try:
         for i in new_data:

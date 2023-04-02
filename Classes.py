@@ -22,7 +22,7 @@ class Human:
     
     def getPravuk(self):
          return self.child.child
-#--------------------        
+#---------------------     
 class CreditCard:
     def __init__(self,number,date,cvc) -> None:
             self.number = number
