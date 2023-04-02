@@ -4,6 +4,7 @@ import xmltodict
 import sys
 import datetime
 import argparse
+import os.path
 
 parser = argparse.ArgumentParser()
 
@@ -23,10 +24,23 @@ def getDictFromUrl(URL):
     data =xmltodict.parse(data)
     return data
 
+path = './list.xml'
+list_file = os.path.isfile(path)
+
+if list_file == False:
+   if list_file == True:
+    print("Такой файл существует")
+else:
+    list_file = open("list.xml", "w", encoding="utf-8")
+    list_file.write(str(getDictFromUrl(URL_EXCHANGE_VAL_LIST)))
+
+
 def kyrs():
     if len(argument.code) == 6:
         ID = argument.code
-    DF =  "%d/%m/%Y"
+    else:
+        print("Не верно введен код валюты")
+    DF = "%d/%m/%Y"
     try:
         dt = datetime.datetime.strptime(argument.date, DF)
     except:
@@ -47,16 +61,15 @@ def kyrs():
     print(echostr)
 
 def Name_Valuta():
-    data =getDictFromUrl(URL_EXCHANGE_VAL_LIST)
+    data =open("list.xml", "r", encoding="utf-8")
     new_data = data['Valuta']['Item']
-    if len(sys.argv) > 1:
-        try:
-            for i in new_data:
-                print("Валюта:", i['Name'], "Код:", i['@ID'])
-        except:
-            str1 = "Ошибка"
-            print(str1)
-            quit(-1)
+    try:
+        for i in new_data:
+            print("Валюта:", i['Name'], "Код:", i['@ID'])
+    except:
+        str1 = "Ошибка"
+        print(str1)
+        quit(-1)
 
 argument = parser.parse_args()
 
@@ -66,8 +79,6 @@ try:
     elif argument.code and argument.date:
         kyrs()
 except:
-    args = parser.parse_args()
-    print(args)
     str0 = "Неверно введены данные"
     print(str0)
 
