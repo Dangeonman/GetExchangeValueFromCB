@@ -1,7 +1,5 @@
-import requests
 import urllib.request
 import xmltodict
-import sys
 import datetime
 import argparse
 import os.path
@@ -27,8 +25,7 @@ def getDictFromUrl(URL):
 path = './list.xml'
 list_file = os.path.isfile(path)
 
-if list_file == False:
-   if list_file == True:
+if list_file == True:
     print("Такой файл существует")
 else:
     list_file = open("list.xml", "w", encoding="utf-8")
