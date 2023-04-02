@@ -6,9 +6,12 @@ import datetime
 import argparse
 
 parser = argparse.ArgumentParser()
+
 parser.add_argument("--list", action="store_true", help = "Вывод доступных валют")
-parser.add_argument("--data", help = "Укажите дату в формате 01/01/2000")
-parser.add_argument("--code", help = "Введите код нужной валюты")
+subparsers = parser.add_subparsers()
+parser_a = subparsers.add_parser('get', help='Для получения курса волют')
+parser_a.add_argument('--code', help='Укажите код валюты',required=True)
+parser_a.add_argument('--date', help='Укажите дату в формает 01/01/2020',required=True)
 
 URL_EXCHANGE_DATE = "http://www.cbr.ru/scripts/XML_daily.asp?date_req=%s"
 URL_EXCHANGE_VAL_LIST = "http://www.cbr.ru/scripts/XML_val.asp?d=0"
@@ -19,36 +22,29 @@ def getDictFromUrl(URL):
     file.close()
     data =xmltodict.parse(data)
     return data
-2
+
 def kyrs():
     if len(argument.code) == 6:
         ID = argument.code
     DF =  "%d/%m/%Y"
-    DD = "01/01/2020"
+    try:
+        dt = datetime.datetime.strptime(argument.date, DF)
+    except:
+        str1 = "Формат введёной даты не соответствует необходимому формату %s" % (DF)   
+        print(str1)
+        quit(-1) 
+    
+    data1 = getDictFromUrl(URL_EXCHANGE_DATE % (argument.date)) 
 
-    if len(sys.argv) > 1:
-        try:
-            dt = datetime.datetime.strptime(argument.data, DF)
-        except:
-            str1 = "Формат введёной даты не соответствует необходимому формату %s" % (DF)   
-            print(str1)
-            quit(-1) 
-        try:
-            DD= argument.data
-        except:
-            str2 = "А где дата?"
-            print(str2)
-    data1 = getDictFromUrl(URL_EXCHANGE_DATE % (DD)) 
+    echostr="Код %s алюта заданна не верно" % (ID)
 
     for i in data1['ValCurs']['Valute']: 
         if i['@ID'] != ID:
             continue
-        try:
-            echostr = "Курс %s" % (i["Name"]) + " к рублю %s" % (i["Value"])
-            print(echostr)
-        except:
-            str3 = "Что-то пошло не так..."
-            print(str3)
+        echostr = "Курс %s" % (i["Name"]) + " к рублю %s" % (i["Value"])
+        break
+            
+    print(echostr)
 
 def Name_Valuta():
     data =getDictFromUrl(URL_EXCHANGE_VAL_LIST)
@@ -63,18 +59,15 @@ def Name_Valuta():
             quit(-1)
 
 argument = parser.parse_args()
+
 try:
     if argument.list:
         Name_Valuta()
-    try:
-        if argument.data:
-            kyrs()
-        elif argument.code:
-            kyrs()
-    except:
-        str1 = "Необходимо указать код и дату"
-        print(str1)
+    elif argument.code and argument.date:
+        kyrs()
 except:
+    args = parser.parse_args()
+    print(args)
     str0 = "Неверно введены данные"
     print(str0)
 
