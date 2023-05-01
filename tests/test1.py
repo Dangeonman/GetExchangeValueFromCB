@@ -68,4 +68,3 @@ try:
 except:
     str0 = "Неверно введены данные"
     print(str0)
-
