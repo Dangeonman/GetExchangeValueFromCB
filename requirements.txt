@@ -1,0 +1,4 @@
+xmltodict
+argparse
+urllib
+tqdm
